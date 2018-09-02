@@ -3,24 +3,26 @@ import ReactDOM from 'react-dom'
 
 const App = () => {
   const kurssi = 'Half Stack -sovelluskehitys'
-  const osa1 = {
-    nimi: 'Reactin perusteet',
-    tehtavia: 10
-  }
-  const osa2 = {
-    nimi: 'Tiedonvälitys propseilla',
-    tehtavia: 7
-  }
-  const osa3 = {
-    nimi: 'Komponenttien tila',
-    tehtavia: 14
-  }
+  const osat = [
+    {
+      nimi: 'Reactin perusteet',
+      tehtavia: 10
+    },
+    {
+      nimi: 'Tiedonvälitys propseilla',
+      tehtavia: 7
+    },
+    {
+      nimi: 'Komponenttien tila',
+      tehtavia: 14
+    }
+  ]
 
   return (
     <div>
-      <Otsikko kurssi={kurssi}/>
-      <Sisalto osa1={osa1} osa2={osa2} osa3={osa3}/>
-      <Yhteensa tehtavia1={osa1.tehtavia} tehtavia2={osa2.tehtavia} tehtavia3={osa3.tehtavia}/>
+      <Otsikko kurssi={kurssi} />
+      <Sisalto osat={osat} />
+      <Yhteensa osat={osat} />
     </div>
   )
 }
@@ -33,9 +35,9 @@ const Otsikko = (props) => (
 const Sisalto = (props) => {
   return (
     <div>
-      <Osa osa={props.osa1.nimi} tehtavia={props.osa1.tehtavia} />
-      <Osa osa={props.osa2.nimi} tehtavia={props.osa2.tehtavia} />
-      <Osa osa={props.osa3.nimi} tehtavia={props.osa3.tehtavia} />
+      {
+        props.osat.map(osa => (<Osa key={osa.nimi} osa={osa.nimi} tehtavia={osa.tehtavia} />))
+      }
     </div>
   )
 }
@@ -45,7 +47,7 @@ const Osa = (props) => (
 )
 
 const Yhteensa = (props) => (
-  <p>yhteensä {props.tehtavia1 + props.tehtavia2 + props.tehtavia3} tehtävää</p>
+  <p>yhteensä {props.osat.reduce((sum, osa) => sum + osa.tehtavia, 0)} tehtävää</p>
 )
 
 ReactDOM.render(
