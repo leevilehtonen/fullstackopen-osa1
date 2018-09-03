@@ -48,21 +48,29 @@ const Statistics = ({stats}) => {
 
     return (
         <div>
-            {
-                Object.keys(stats).map((key, id) => (
-                    <p key={id}>{key} {stats[key]}</p>
-                )) 
-            }
-            <Statistic teksti={"keskiarvo"} arvo={getKeskiarvo()}/>
-            <Statistic teksti={"positiiviset"} arvo={getPositiiviset() + " %"}/>
+            <table>
+                <tbody>
+                    {
+                        Object.keys(stats).map((key, id) => (
+                            <tr key={id}>
+                                <td>{key}</td>
+                                <td>{stats[key]}</td>
+                            </tr>
+                        )) 
+                    }
+                    <Statistic teksti={"keskiarvo"} arvo={getKeskiarvo()}/>
+                    <Statistic teksti={"positiiviset"} arvo={getPositiiviset() + " %"}/>
+                </tbody>
+            </table>
         </div>
     )
 }
 const Statistic = ({teksti, arvo}) => {
     return (
-        <p>
-            {teksti} {arvo}
-        </p>
+        <tr>
+            <td>{teksti}</td>
+            <td>{arvo}</td>
+        </tr>
     )
 }
 
