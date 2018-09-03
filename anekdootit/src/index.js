@@ -6,10 +6,18 @@ class App extends React.Component {
     super(props)
     this.state = {
       selected: 0,
-      points: {}
+      points: this.initPoints()
     }
   }
 
+
+  initPoints = () => {
+    const newPoints = {}
+    for (let i = 0; i < this.props.anecdotes.length; i++) {
+        newPoints[i] = 0;
+    }
+    return newPoints;
+  }
   nextAnecdote = () => () => this.setState({selected: Math.floor(Math.random() * anecdotes.length)})
   addPoints = () => () => {
     const newPoints = {...this.state.points}
@@ -20,23 +28,29 @@ class App extends React.Component {
     }
     return this.setState({points: newPoints})
   }
+  getPointsforAnecdote = (selected) => this.state.points[selected]
+  getMostVotedAnecdote = () => Object.keys(this.state.points).reduce((acc, point)=> this.state.points[acc] < this.state.points[point] ? point : acc , 0)
 
   render() {
-    console.log(this.state.points)
     return (
       <div>
         <Display text={this.props.anecdotes[this.state.selected]} />
-        <Result selected={this.state.selected} points={this.state.points}/>
+        <Result points={this.getPointsforAnecdote(this.state.selected)}/>
         <Button text={"vote"} handleClick={this.addPoints()}/>
         <Button text={"next anecdote"} handleClick={this.nextAnecdote()}/>
+        <Title text={"anecdote with most votes"}/>
+        <Display text={this.props.anecdotes[this.getMostVotedAnecdote()]} />
+        <Result points={this.state.points[this.getMostVotedAnecdote()]}/>
       </div>
     )
   }
 }
 
+
 const Display = ({text}) => <p>{text}</p>
+const Title = ({text}) => <h1>{text}</h1>
 const Button = ({text, handleClick}) => (<button onClick={handleClick}>{text}</button>)
-const Result = ({selected, points}) => points[selected] === undefined ? <p>has 0 votes</p> : <p>has {points[selected]} votes</p>
+const Result = ({points}) => <p>has {points} votes</p>
 
 const anecdotes = [
   'If it hurts, do it more often',
