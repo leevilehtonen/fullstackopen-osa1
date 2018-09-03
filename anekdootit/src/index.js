@@ -5,23 +5,38 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      selected: 0
+      selected: 0,
+      points: {}
     }
   }
 
   nextAnecdote = () => () => this.setState({selected: Math.floor(Math.random() * anecdotes.length)})
+  addPoints = () => () => {
+    const newPoints = {...this.state.points}
+    if(this.state.points[this.state.selected] === undefined) {
+        newPoints[this.state.selected] = 1
+    } else {
+        newPoints[this.state.selected]++
+    }
+    return this.setState({points: newPoints})
+  }
 
   render() {
+    console.log(this.state.points)
     return (
       <div>
-        <p>{this.props.anecdotes[this.state.selected]}</p>
+        <Display text={this.props.anecdotes[this.state.selected]} />
+        <Result selected={this.state.selected} points={this.state.points}/>
+        <Button text={"vote"} handleClick={this.addPoints()}/>
         <Button text={"next anecdote"} handleClick={this.nextAnecdote()}/>
       </div>
     )
   }
 }
 
+const Display = ({text}) => <p>{text}</p>
 const Button = ({text, handleClick}) => (<button onClick={handleClick}>{text}</button>)
+const Result = ({selected, points}) => points[selected] === undefined ? <p>has 0 votes</p> : <p>has {points[selected]} votes</p>
 
 const anecdotes = [
   'If it hurts, do it more often',
